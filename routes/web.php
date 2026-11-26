@@ -4,6 +4,8 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HargaBeliController;
 use App\Http\Controllers\HasilTimbangPksController;
 use App\Http\Controllers\PasokanTbsController;
+use App\Http\Controllers\PembayaranPetaniController;
+use App\Http\Controllers\PenerimaanPksController;
 use App\Http\Controllers\PengirimanTbsController;
 use App\Http\Controllers\PetaniController;
 use App\Http\Controllers\PksPembeliController;
@@ -62,5 +64,10 @@ Route::middleware('auth')->group(function () {
 
     Route::middleware('role:pemilik')->group(function () {
         Route::resource('harga-beli', HargaBeliController::class);
+        Route::resource('pembayaran-petani', PembayaranPetaniController::class)->only(['index', 'create', 'store', 'destroy']);
+        Route::get('penerimaan-pks', [PenerimaanPksController::class, 'index'])->name('penerimaan-pks.index');
+        Route::get('penerimaan-pks/{hasil_timbang_pks}/edit', [PenerimaanPksController::class, 'edit'])->name('penerimaan-pks.edit');
+        Route::put('penerimaan-pks/{hasil_timbang_pks}', [PenerimaanPksController::class, 'update'])->name('penerimaan-pks.update');
+        Route::post('penerimaan-pks/{hasil_timbang_pks}/reset', [PenerimaanPksController::class, 'reset'])->name('penerimaan-pks.reset');
     });
 });

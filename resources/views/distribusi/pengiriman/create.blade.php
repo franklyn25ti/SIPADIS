@@ -2,10 +2,7 @@
 
 @section('content')
 <div class="main-card mb-3 card shadow-sm border-0">
-    <div class="card-header d-flex justify-content-between align-items-center">
-        <span>Form Pencatatan Pengiriman TBS ke PKS (Multi-Petani)</span>
-        <span class="badge bg-primary">Kode Pengiriman: {{ $noSuratJalan }}</span>
-    </div>
+    <div class="card-header">Form Pencatatan Pengiriman TBS ke PKS</div>
     <div class="card-body">
         @if($errors->any())
             <div class="alert alert-danger">
@@ -20,11 +17,7 @@
         <form action="{{ route('pengiriman-tbs.store') }}" method="POST" id="formPengiriman">
             @csrf
             <div class="row">
-                <div class="col-md-3 mb-3">
-                    <label class="form-label">Kode Pengiriman <span class="text-danger">*</span></label>
-                    <input type="text" name="no_surat_jalan" class="form-control" value="{{ old('no_surat_jalan', $noSuratJalan) }}" required>
-                </div>
-                <div class="col-md-3 mb-3">
+                <div class="col-md-6 mb-3">
                     <label class="form-label">Tanggal Kirim <span class="text-danger">*</span></label>
                     <input type="date" name="tanggal_kirim" class="form-control" value="{{ old('tanggal_kirim', now()->toDateString()) }}" required>
                 </div>

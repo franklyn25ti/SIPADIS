@@ -7,8 +7,8 @@
             <div class="page-title-icon">
                 <i class="pe-7s-box2 icon-gradient bg-grow-early"></i>
             </div>
-            <div>Riwayat Pasokan & Pembelian TBS Petani
-                <div class="page-title-subheading">Pencatatan timbangan masuk Tandan Buah Segar (TBS) dari petani mitra</div>
+            <div>Pencatatan Pasokan TBS Petani
+                <div class="page-title-subheading">Daftar pencatatan pasokan Tandan Buah Segar (TBS) dari petani mitra</div>
             </div>
         </div>
         <div class="page-title-actions">
@@ -72,12 +72,9 @@
                 <thead>
                     <tr>
                         <th class="text-center">#</th>
-                        <th>No. Transaksi</th>
                         <th>Tanggal</th>
                         <th>Petani Mitra</th>
-                        <th class="text-end">Timbang (kg)</th>
-                        <th class="text-end">Potongan (kg)</th>
-                        <th class="text-end">Netto (kg)</th>
+                        <th class="text-end">Berat Pasokan (kg)</th>
                         <th class="text-end">Harga (Rp/kg)</th>
                         <th class="text-end">Nilai Pembelian</th>
                         <th class="text-center">Status Bayar</th>
@@ -89,11 +86,8 @@
                     @forelse($pasokanList as $item)
                     <tr>
                         <td class="text-center text-muted">{{ $loop->iteration }}</td>
-                        <td class="fw-bold text-primary">{{ $item->no_transaksi }}</td>
                         <td>{{ $item->tanggal->format('d/m/Y') }}</td>
                         <td class="fw-semibold">{{ $item->petani->nama_petani ?? '-' }}</td>
-                        <td class="text-end">{{ number_format($item->berat_timbang, 2, ',', '.') }}</td>
-                        <td class="text-end text-danger">{{ number_format($item->potongan, 2, ',', '.') }}</td>
                         <td class="text-end fw-bold">{{ number_format($item->berat_netto, 2, ',', '.') }}</td>
                         <td class="text-end">Rp {{ number_format($item->harga_beli, 0, ',', '.') }}</td>
                         <td class="text-end fw-bold text-success">Rp {{ number_format($item->nilai_pembelian, 0, ',', '.') }}</td>
@@ -109,7 +103,7 @@
                         <td class="small text-muted">{{ $item->user->name ?? '-' }}</td>
                         <td class="text-center">
                             <a href="{{ route('pasokan-tbs.edit', $item->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <form action="{{ route('pasokan-tbs.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus transaksi pasokan {{ $item->no_transaksi }} ini?')">
+                            <form action="{{ route('pasokan-tbs.destroy', $item->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus data pasokan dari {{ $item->petani->nama_petani ?? 'petani' }} ({{ $item->tanggal->format('d/m/Y') }})?')">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-danger btn-sm">Hapus</button>
@@ -118,16 +112,14 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="12" class="text-center text-muted py-4">Belum ada data transaksi pasokan TBS.</td>
+                        <td colspan="9" class="text-center text-muted py-4">Belum ada data pasokan TBS dari petani.</td>
                     </tr>
                     @endforelse
                 </tbody>
                 @if($pasokanList->isNotEmpty())
                 <tfoot class="table-light fw-bold">
                     <tr>
-                        <td colspan="4" class="text-end">Total:</td>
-                        <td class="text-end">{{ number_format($pasokanList->sum('berat_timbang'), 2, ',', '.') }} kg</td>
-                        <td class="text-end text-danger">{{ number_format($pasokanList->sum('potongan'), 2, ',', '.') }} kg</td>
+                        <td colspan="3" class="text-end">Total:</td>
                         <td class="text-end">{{ number_format($pasokanList->sum('berat_netto'), 2, ',', '.') }} kg</td>
                         <td></td>
                         <td class="text-end text-success">Rp {{ number_format($pasokanList->sum('nilai_pembelian'), 0, ',', '.') }}</td>

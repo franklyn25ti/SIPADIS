@@ -29,10 +29,11 @@
         default                   => 'Selamat Malam',
     };
 
-    $sidebarHargaAktif   = \App\Models\HargaBeli::getHargaAktif();
-    $countPetaniAktif    = \App\Models\Petani::where('status_aktif', true)->count();
-    $countPasokanBelum   = \App\Models\PasokanTbs::where('status_pembayaran', '!=', 'lunas')->count();
+    $sidebarHargaAktif    = \App\Models\HargaBeli::getHargaAktif();
+    $countPetaniAktif     = \App\Models\Petani::where('status_aktif', true)->count();
+    $countPasokanBelum    = \App\Models\PasokanTbs::where('status_pembayaran', '!=', 'lunas')->count();
     $countPengirimanAktif = \App\Models\PengirimanTbs::where('status_pengiriman', 'dikirim')->count();
+    $countPiutangPks      = \App\Models\HasilTimbangPks::where('status_penerimaan', '!=', 'lunas')->count();
 @endphp
 
     <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
@@ -148,46 +149,9 @@
                             </li>
                         </ul>
 
-                        <!-- 4. Grouped Section 1: Pintasan Operasional ("v Integrations +" style) -->
-                        <div class="m-section-divider"></div>
-                        <div class="m-section-header">
-                            <span class="m-section-header-left">
-                                <i class="fa fa-chevron-down" style="font-size: 0.65rem;"></i>
-                                <span>Pintasan Operasional</span>
-                            </span>
-                            <a href="{{ route('pasokan-tbs.create') }}" class="m-section-add" title="Catat Pasokan Baru">
-                                <i class="fa fa-plus"></i>
-                            </a>
-                        </div>
-                        <ul class="m-subnav-list">
-                            <li class="m-nav-item">
-                                <a href="{{ route('pasokan-tbs.create') }}" class="m-nav-link {{ request()->routeIs('pasokan-tbs.create') ? 'active' : '' }}">
-                                    <span class="m-nav-link-left">
-                                        <i class="fa fa-plus-circle m-nav-icon"></i>
-                                        <span>Catat Timbang Masuk</span>
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="m-nav-item">
-                                <a href="{{ route('pengiriman-tbs.create') }}" class="m-nav-link {{ request()->routeIs('pengiriman-tbs.create') ? 'active' : '' }}">
-                                    <span class="m-nav-link-left">
-                                        <i class="fa fa-truck-loading m-nav-icon"></i>
-                                        <span>Catat Pengiriman PKS</span>
-                                    </span>
-                                </a>
-                            </li>
-                            <li class="m-nav-item">
-                                <a href="{{ route('hasil-timbang-pks.create') }}" class="m-nav-link {{ request()->routeIs('hasil-timbang-pks.create') ? 'active' : '' }}">
-                                    <span class="m-nav-link-left">
-                                        <i class="fa fa-balance-scale m-nav-icon"></i>
-                                        <span>Input Nota Timbang PKS</span>
-                                    </span>
-                                </a>
-                            </li>
-                        </ul>
-
-                        <!-- 5. Grouped Section 2: Keuangan & Harga (Only for Pemilik, "v Sales Channels +" style) -->
+                        <!-- 4. Grouped Section: Keuangan & Harga (Only for Pemilik) -->
                         @if(!$currentUser || $currentUser->isPemilik())
+                            <div class="m-section-divider"></div>
                             <div class="m-section-header">
                                 <span class="m-section-header-left">
                                     <i class="fa fa-chevron-down" style="font-size: 0.65rem;"></i>
@@ -205,6 +169,28 @@
                                             <span>Harga Beli Harian</span>
                                         </span>
                                         <i class="fa fa-external-link-alt text-muted" style="font-size: 0.68rem;"></i>
+                                    </a>
+                                </li>
+                                <li class="m-nav-item">
+                                    <a href="{{ route('pembayaran-petani.index') }}" class="m-nav-link {{ request()->routeIs('pembayaran-petani.*') ? 'active' : '' }}">
+                                        <span class="m-nav-link-left">
+                                            <i class="fa fa-money-bill-wave m-nav-icon"></i>
+                                            <span>Pembayaran Petani</span>
+                                        </span>
+                                        @if($countPasokanBelum > 0)
+                                            <span class="m-nav-badge">{{ $countPasokanBelum }}</span>
+                                        @endif
+                                    </a>
+                                </li>
+                                <li class="m-nav-item">
+                                    <a href="{{ route('penerimaan-pks.index') }}" class="m-nav-link {{ request()->routeIs('penerimaan-pks.*') ? 'active' : '' }}">
+                                        <span class="m-nav-link-left">
+                                            <i class="fa fa-wallet m-nav-icon"></i>
+                                            <span>Penerimaan Dana PKS</span>
+                                        </span>
+                                        @if($countPiutangPks > 0)
+                                            <span class="m-nav-badge">{{ $countPiutangPks }}</span>
+                                        @endif
                                     </a>
                                 </li>
                             </ul>

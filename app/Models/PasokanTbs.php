@@ -75,4 +75,37 @@ class PasokanTbs extends Model
     {
         return $this->hasMany(PembayaranPetani::class, 'pasokan_id');
     }
+
+    public function getTotalDibayarAttribute(): float
+    {
+        if (array_key_exists('pembayaran_petani_sum_jumlah_bayar', $this->attributes)) {
+            return (float) ($this->attributes['pembayaran_petani_sum_jumlah_bayar'] ?? 0);
+        }
+
+        return (float) $this->pembayaranPetani->sum('jumlah_bayar');
+    }
+
+    public function getSisaTagihanAttribute(): float
+    {
+        return round(max(0, (float) $this->nilai_pembelian - $this->total_dibayar), 2);
+    }
+
+    public function syncStatusPembayaran(): string
+    {
+        $totalBayar = round((float) $this->pembayaranPetani()->sum('jumlah_bayar'), 2);
+        $nilaiPembelian = round((float) $this->nilai_pembelian, 2);
+
+        if ($totalBayar <= 0) {
+            $status = 'belum_dibayar';
+        } elseif ($totalBayar >= $nilaiPembelian) {
+            $status = 'lunas';
+        } else {
+            $status = 'dibayar_sebagian';
+        }
+
+        $this->status_pembayaran = $status;
+        $this->save();
+
+        return $status;
+    }
 }

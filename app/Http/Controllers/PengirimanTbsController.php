@@ -32,7 +32,6 @@ class PengirimanTbsController extends Controller
     public function create()
     {
         $pksList = PksPembeli::orderBy('nama')->get();
-        $noSuratJalan = PengirimanTbs::generateNoSuratJalan();
 
         // Ambil pasokan TBS beserta total berat yang sudah pernah dimuat
         $pasokanTersedia = PasokanTbs::with(['petani', 'detailPengiriman'])
@@ -47,13 +46,12 @@ class PengirimanTbsController extends Controller
             ->filter(fn (PasokanTbs $pasokan) => $pasokan->sisa_berat > 0)
             ->values();
 
-        return view('distribusi.pengiriman.create', compact('pksList', 'noSuratJalan', 'pasokanTersedia'));
+        return view('distribusi.pengiriman.create', compact('pksList', 'pasokanTersedia'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'no_surat_jalan' => 'required|string|max:100|unique:pengiriman_tbs,no_surat_jalan',
             'tanggal_kirim'  => 'required|date',
             'kendaraan'      => 'required|string|max:100',
             'sopir'          => 'required|string|max:100',
@@ -76,7 +74,7 @@ class PengirimanTbsController extends Controller
 
         $pengiriman = DB::transaction(function () use ($validated, $request) {
             $pengiriman = PengirimanTbs::create([
-                'no_surat_jalan'    => $validated['no_surat_jalan'],
+                'no_surat_jalan'    => PengirimanTbs::generateNoSuratJalan($validated['tanggal_kirim']),
                 'tanggal_kirim'     => $validated['tanggal_kirim'],
                 'kendaraan'         => $validated['kendaraan'],
                 'sopir'             => $validated['sopir'],

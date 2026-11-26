@@ -39,9 +39,8 @@ class PasokanTbsController extends Controller
     {
         $petaniAktif = Petani::where('status_aktif', true)->orderBy('nama_petani')->get();
         $hargaHariIni = HargaBeli::getNominalAktif();
-        $noTransaksi = PasokanTbs::generateNoTransaksi();
 
-        return view('transaksi.pasokan.create', compact('petaniAktif', 'hargaHariIni', 'noTransaksi'));
+        return view('transaksi.pasokan.create', compact('petaniAktif', 'hargaHariIni'));
     }
 
     public function store(Request $request)
@@ -50,13 +49,12 @@ class PasokanTbsController extends Controller
             'tanggal'       => 'required|date',
             'petani_id'     => 'required|exists:petanis,id',
             'berat_timbang' => 'required|numeric|gt:0',
-            'potongan'      => 'nullable|numeric|min:0|lte:berat_timbang',
             'harga_beli'    => 'required|numeric|min:0',
         ]);
 
         $beratTimbang = (float) $validated['berat_timbang'];
-        $potongan = (float) ($validated['potongan'] ?? 0);
-        $beratNetto = round($beratTimbang - $potongan, 2);
+        $potongan = 0;
+        $beratNetto = round($beratTimbang, 2);
         $hargaBeli = (float) $validated['harga_beli'];
         $nilaiPembelian = round($beratNetto * $hargaBeli, 2);
 
@@ -73,7 +71,7 @@ class PasokanTbsController extends Controller
             'user_id'           => $request->user()?->id,
         ]);
 
-        return redirect()->route('pasokan-tbs.index')->with('success', 'Transaksi pasokan TBS berhasil dicatat.');
+        return redirect()->route('pasokan-tbs.index')->with('success', 'Data pasokan TBS petani berhasil dicatat.');
     }
 
     public function edit(PasokanTbs $pasokan_tb)
@@ -95,13 +93,12 @@ class PasokanTbsController extends Controller
             'tanggal'       => 'required|date',
             'petani_id'     => 'required|exists:petanis,id',
             'berat_timbang' => 'required|numeric|gt:0',
-            'potongan'      => 'nullable|numeric|min:0|lte:berat_timbang',
             'harga_beli'    => 'required|numeric|min:0',
         ]);
 
         $beratTimbang = (float) $validated['berat_timbang'];
-        $potongan = (float) ($validated['potongan'] ?? 0);
-        $beratNetto = round($beratTimbang - $potongan, 2);
+        $potongan = 0;
+        $beratNetto = round($beratTimbang, 2);
         $hargaBeli = (float) $validated['harga_beli'];
         $nilaiPembelian = round($beratNetto * $hargaBeli, 2);
 
@@ -115,13 +112,13 @@ class PasokanTbsController extends Controller
             'nilai_pembelian' => $nilaiPembelian,
         ]);
 
-        return redirect()->route('pasokan-tbs.index')->with('success', 'Data transaksi pasokan TBS berhasil diperbarui.');
+        return redirect()->route('pasokan-tbs.index')->with('success', 'Data pasokan TBS petani berhasil diperbarui.');
     }
 
     public function destroy(PasokanTbs $pasokan_tb)
     {
         $pasokan_tb->delete();
 
-        return redirect()->route('pasokan-tbs.index')->with('success', 'Data transaksi pasokan TBS berhasil dihapus.');
+        return redirect()->route('pasokan-tbs.index')->with('success', 'Data pasokan TBS petani berhasil dihapus.');
     }
 }

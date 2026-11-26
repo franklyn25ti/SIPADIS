@@ -40,10 +40,11 @@ class PetaniController extends Controller
             'nama_petani'  => 'required|string|max:255',
             'no_hp'        => 'nullable|string|max:20',
             'alamat'       => 'nullable|string',
-            'luas_lahan'   => 'required|numeric|min:0',
+            'luas_lahan'   => 'nullable|numeric|min:0',
             'status_aktif' => 'nullable|boolean',
         ]);
 
+        $validated['luas_lahan'] = $validated['luas_lahan'] ?? 0;
         $validated['status_aktif'] = $request->boolean('status_aktif', true);
 
         Petani::create($validated);
@@ -62,7 +63,7 @@ class PetaniController extends Controller
             'nama_petani'  => 'required|string|max:255',
             'no_hp'        => 'nullable|string|max:20',
             'alamat'       => 'nullable|string',
-            'luas_lahan'   => 'required|numeric|min:0',
+            'luas_lahan'   => 'nullable|numeric|min:0',
             'status_aktif' => 'nullable|boolean',
         ]);
 

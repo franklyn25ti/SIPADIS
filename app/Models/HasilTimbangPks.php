@@ -43,4 +43,9 @@ class HasilTimbangPks extends Model
     {
         return $this->belongsTo(PengirimanTbs::class, 'pengiriman_id');
     }
+
+    public function getSisaPiutangAttribute(): float
+    {
+        return round(max(0, (float) $this->nilai_penjualan - (float) $this->jumlah_diterima), 2);
+    }
 }
