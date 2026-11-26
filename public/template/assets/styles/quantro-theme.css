@@ -1,0 +1,764 @@
+/* ==========================================================================
+   SIPADIS - Merivo Sidebar & Modern Dashboard UI Theme
+   ========================================================================== */
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --m-sidebar-bg: #f8f9fb;
+    --m-sidebar-border: #eceef2;
+    --m-canvas-bg: #ffffff;
+    --m-surface-pill: #eef0f4;
+    --m-card-border: #edf0f5;
+    --m-brand-orange: #f97316;
+    --m-brand-amber: #f59e0b;
+    --m-text-main: #111827;
+    --m-text-secondary: #4b5563;
+    --m-text-muted: #6b7280;
+    --m-success: #10b981;
+    --m-success-soft: #d1fae5;
+    --m-warning: #f59e0b;
+    --m-warning-soft: #fef3c7;
+    --m-danger: #ef4444;
+    --m-danger-soft: #fee2e2;
+    --m-info: #6366f1;
+    --m-info-soft: #e0e7ff;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+    background-color: var(--m-canvas-bg) !important;
+    color: var(--m-text-main);
+    overflow-x: hidden;
+}
+
+.app-container.app-theme-white {
+    background-color: var(--m-canvas-bg) !important;
+    min-height: 100vh;
+}
+
+/* Hide legacy fixed top bar on desktop so sidebar runs full-height top-to-bottom like Merivo */
+.app-header {
+    display: none !important;
+}
+
+.fixed-header .app-main {
+    padding-top: 0 !important;
+}
+
+/* Mobile Header Bar (only visible on tablet/mobile < 992px) */
+.m-mobile-topbar {
+    display: none;
+    background-color: var(--m-sidebar-bg);
+    border-bottom: 1px solid var(--m-sidebar-border);
+    padding: 12px 18px;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 1040;
+}
+
+/* Full-Height Left Sidebar (Merivo Structure) */
+.app-sidebar {
+    background-color: var(--m-sidebar-bg) !important;
+    width: 265px !important;
+    border-right: 1px solid var(--m-sidebar-border) !important;
+    box-shadow: none !important;
+    position: fixed !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    height: 100vh !important;
+    z-index: 1035;
+    display: flex !important;
+    flex-direction: column !important;
+    padding-top: 0 !important;
+}
+
+.app-sidebar.sidebar-shadow {
+    box-shadow: none !important;
+}
+
+.app-sidebar > .app-header__logo,
+.app-sidebar > .app-header__mobile-menu,
+.app-sidebar > .app-header__menu {
+    display: none !important;
+}
+
+.app-sidebar .scrollbar-sidebar {
+    background-color: var(--m-sidebar-bg) !important;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100vh !important;
+    overflow-y: auto;
+    padding: 18px 16px;
+}
+
+/* 1. Top Brand Row (Merivo Logo + Collapse Icon) */
+.m-brand-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 2px 6px 14px;
+}
+
+.m-brand-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+}
+
+.m-brand-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #fb923c 0%, #ea580c 100%);
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    box-shadow: 0 3px 10px rgba(234, 88, 12, 0.25);
+}
+
+.m-brand-name {
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: #111827;
+    letter-spacing: -0.02em;
+}
+
+.m-collapse-btn {
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    border: 1px solid transparent;
+    background: transparent;
+    color: #6b7280;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+
+.m-collapse-btn:hover {
+    background-color: var(--m-surface-pill);
+    color: #111827;
+}
+
+/* 2. Store / Unit Switcher Pill ("Acme Store" box in Merivo) */
+.m-store-switcher {
+    background-color: var(--m-surface-pill);
+    border: 1px solid #e2e5ec;
+    border-radius: 12px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 18px;
+    text-decoration: none;
+    color: #111827;
+    transition: all 0.15s ease;
+}
+
+.m-store-switcher:hover {
+    background-color: #e5e8ef;
+    color: #111827;
+}
+
+.m-store-switcher .m-store-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.m-store-switcher .m-store-icon {
+    color: #374151;
+    font-size: 0.95rem;
+}
+
+.m-store-switcher .m-store-title {
+    font-weight: 700;
+    font-size: 0.86rem;
+    color: #111827;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.m-store-switcher .m-store-sub {
+    font-size: 0.72rem;
+    color: #6b7280;
+    display: block;
+}
+
+/* 3. Sidebar Navigation List (Merivo Style) */
+.m-nav-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 14px 0;
+}
+
+.m-nav-item {
+    margin-bottom: 3px;
+}
+
+.m-nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 9px 12px;
+    border-radius: 10px;
+    color: #374151 !important;
+    font-weight: 500;
+    font-size: 0.88rem;
+    text-decoration: none !important;
+    transition: all 0.15s ease;
+}
+
+.m-nav-link-left {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+}
+
+.m-nav-icon {
+    width: 18px;
+    text-align: center;
+    font-size: 0.95rem;
+    color: #6b7280;
+    transition: color 0.15s ease;
+}
+
+.m-nav-link:hover {
+    background-color: #eef0f5;
+    color: #111827 !important;
+}
+
+.m-nav-link:hover .m-nav-icon {
+    color: #111827;
+}
+
+.m-nav-link.active {
+    background-color: #ffffff;
+    color: #111827 !important;
+    font-weight: 700;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+    border: 1px solid #e5e7eb;
+}
+
+.m-nav-link.active .m-nav-icon {
+    color: var(--m-brand-orange);
+}
+
+.m-nav-badge {
+    background-color: #e5e7eb;
+    color: #374151;
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+    line-height: 1.3;
+}
+
+.m-nav-link.active .m-nav-badge {
+    background-color: #ffedd5;
+    color: #c2410c;
+}
+
+/* 4. Sidebar Section Groups ("v Integrations +", "v Sales Channels +") */
+.m-section-divider {
+    border-top: 1px solid #e5e7eb;
+    margin: 12px 4px;
+}
+
+.m-section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 10px;
+    color: #6b7280;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.m-section-header-left {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.m-section-add {
+    color: #6b7280;
+    text-decoration: none;
+    font-size: 0.8rem;
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s ease;
+}
+
+.m-section-add:hover {
+    background-color: #e5e7eb;
+    color: #111827;
+}
+
+.m-subnav-list {
+    list-style: none;
+    padding: 0 0 0 12px;
+    margin: 2px 0 8px 0;
+}
+
+/* 5. Bottom User Profile & Settings / Log Out Box (Merivo Bottom-Left Card) */
+.m-sidebar-footer {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 10px;
+    margin-top: 14px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.02);
+}
+
+.m-user-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 8px 10px;
+    border-bottom: 1px solid #f1f3f7;
+    margin-bottom: 6px;
+}
+
+.m-user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+}
+
+.m-user-avatar {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 1px solid #e5e7eb;
+}
+
+.m-user-name {
+    font-weight: 700;
+    font-size: 0.85rem;
+    color: #111827;
+    line-height: 1.2;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.m-user-role {
+    font-size: 0.72rem;
+    color: #6b7280;
+}
+
+.m-footer-action {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 7px 10px;
+    border-radius: 9px;
+    border: none;
+    background: transparent;
+    color: #4b5563;
+    font-size: 0.84rem;
+    font-weight: 500;
+    text-decoration: none;
+    text-align: left;
+    transition: all 0.15s ease;
+}
+
+.m-footer-action:hover {
+    background-color: #f3f4f6;
+    color: #111827;
+}
+
+.m-footer-action.m-logout-btn:hover {
+    background-color: #fef2f2;
+    color: #dc2626;
+}
+
+/* Main Content Area (Right of Sidebar) */
+.fixed-sidebar .app-main .app-main__outer {
+    padding-left: 265px !important;
+    padding-right: 0 !important;
+    padding-bottom: 0 !important;
+}
+
+.app-main__inner {
+    background-color: var(--m-canvas-bg) !important;
+    padding: 28px 36px !important;
+    min-height: 100vh;
+}
+
+.app-wrapper-footer {
+    display: none !important;
+}
+
+/* Welcome Back Greeting Header ("Welcome Back, Liam") */
+.m-welcome-bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+    padding-bottom: 20px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #f1f3f7;
+}
+
+.m-welcome-title {
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: #111827;
+    letter-spacing: -0.025em;
+    margin-bottom: 3px;
+}
+
+.m-welcome-sub {
+    font-size: 0.85rem;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.m-role-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-size: 0.74rem;
+    font-weight: 700;
+}
+
+.m-role-pemilik {
+    background-color: #ffedd5;
+    color: #c2410c;
+}
+
+.m-role-petugas {
+    background-color: #e0e7ff;
+    color: #4338ca;
+}
+
+/* Session Entry Welcome Banner */
+.m-session-welcome-alert {
+    background: linear-gradient(135deg, #fff7ed 0%, #ffedd5 100%);
+    border: 1px solid #fed7aa;
+    border-radius: 16px;
+    padding: 16px 20px;
+    margin-bottom: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+/* Page Titles & Cards */
+.app-page-title {
+    background: transparent !important;
+    margin: 0 0 22px 0 !important;
+    padding: 0 !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.app-page-title .page-title-icon {
+    display: none !important;
+}
+
+.app-page-title .page-title-heading {
+    font-size: 1.45rem !important;
+    font-weight: 800 !important;
+    color: var(--m-text-main) !important;
+    letter-spacing: -0.02em;
+}
+
+.app-page-title .page-title-subheading {
+    font-size: 0.86rem !important;
+    color: var(--m-text-muted) !important;
+    font-weight: 400 !important;
+    padding-top: 3px !important;
+    opacity: 1 !important;
+}
+
+.main-card.card,
+.q-card {
+    background-color: #ffffff !important;
+    border: 1px solid var(--m-card-border) !important;
+    border-radius: 18px !important;
+    box-shadow: 0 2px 10px rgba(17, 24, 39, 0.03) !important;
+    overflow: hidden;
+}
+
+.main-card.card .card-header {
+    background-color: transparent !important;
+    border-bottom: 1px solid var(--m-card-border) !important;
+    padding: 16px 22px !important;
+    font-weight: 700 !important;
+    font-size: 0.98rem !important;
+    color: var(--m-text-main) !important;
+    height: auto !important;
+}
+
+.main-card.card .card-body {
+    padding: 22px !important;
+}
+
+/* KPI Cards (Merivo Clean White Framed Cards) */
+.q-kpi-card {
+    background-color: #ffffff;
+    border-radius: 18px;
+    padding: 20px 22px;
+    height: 100%;
+    position: relative;
+    border: 1px solid var(--m-card-border);
+    box-shadow: 0 2px 10px rgba(17, 24, 39, 0.03);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.q-kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(17, 24, 39, 0.06);
+}
+
+.q-kpi-card.q-kpi-dark {
+    background: linear-gradient(145deg, #1c1e24 0%, #131418 100%) !important;
+    color: #ffffff !important;
+    border: none;
+}
+
+.q-kpi-icon {
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.05rem;
+}
+
+.q-kpi-dark .q-kpi-icon {
+    background-color: rgba(245, 158, 11, 0.18);
+    color: #fbbf24;
+}
+
+.q-kpi-light .q-kpi-icon {
+    background-color: #f3e8ff;
+    color: #7e22ce;
+}
+
+.q-kpi-light .q-kpi-icon.q-icon-amber {
+    background-color: #ffedd5;
+    color: #ea580c;
+}
+
+.q-kpi-label {
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: #374151;
+    margin-top: 12px;
+    margin-bottom: 4px;
+}
+
+.q-kpi-dark .q-kpi-label {
+    color: #9ca3af;
+}
+
+.q-kpi-value {
+    font-size: 1.7rem;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.2;
+}
+
+.q-kpi-trend {
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 11px !important;
+    font-weight: 600 !important;
+    padding: 8px 16px !important;
+    font-size: 0.85rem !important;
+    transition: all 0.15s ease !important;
+}
+
+.btn-sm {
+    padding: 5px 11px !important;
+    font-size: 0.77rem !important;
+    border-radius: 8px !important;
+}
+
+.page-title-actions .btn-success,
+.btn-q-dark {
+    background-color: #111827 !important;
+    border-color: #111827 !important;
+    color: #ffffff !important;
+    border-radius: 11px !important;
+    padding: 9px 18px !important;
+}
+
+.page-title-actions .btn-success:hover,
+.btn-q-dark:hover {
+    background-color: #1f2937 !important;
+    border-color: #1f2937 !important;
+    color: #fbbf24 !important;
+}
+
+.btn-success {
+    background-color: #111827 !important;
+    border-color: #111827 !important;
+    color: #ffffff !important;
+}
+
+.btn-primary {
+    background-color: #f97316 !important;
+    border-color: #f97316 !important;
+    color: #ffffff !important;
+}
+
+.btn-primary:hover {
+    background-color: #ea580c !important;
+    border-color: #ea580c !important;
+}
+
+.btn-warning {
+    background-color: #fef3c7 !important;
+    border-color: #fde68a !important;
+    color: #92400e !important;
+}
+
+.btn-danger {
+    background-color: #fee2e2 !important;
+    border-color: #fecaca !important;
+    color: #b91c1c !important;
+}
+
+.btn-info {
+    background-color: #e0e7ff !important;
+    border-color: #c7d2fe !important;
+    color: #3730a3 !important;
+}
+
+/* Tables */
+.table thead th {
+    background-color: transparent !important;
+    border-bottom: 1px solid #e5e7eb !important;
+    color: #6b7280 !important;
+    font-weight: 600 !important;
+    font-size: 0.77rem !important;
+    padding: 12px 14px !important;
+}
+
+.table tbody td {
+    padding: 14px !important;
+    vertical-align: middle;
+    border-bottom: 1px solid #f1f3f7 !important;
+    font-size: 0.87rem;
+    color: #1f2937;
+}
+
+.table-striped > tbody > tr:nth-of-type(odd) > * {
+    --bs-table-accent-bg: transparent !important;
+    background-color: transparent !important;
+}
+
+/* Badges */
+.badge {
+    padding: 5px 11px !important;
+    border-radius: 999px !important;
+    font-weight: 600 !important;
+    font-size: 0.74rem !important;
+}
+
+.badge.bg-success {
+    background-color: var(--m-success-soft) !important;
+    color: #065f46 !important;
+}
+
+.badge.bg-warning {
+    background-color: var(--m-warning-soft) !important;
+    color: #92400e !important;
+}
+
+.badge.bg-danger {
+    background-color: var(--m-danger-soft) !important;
+    color: #991b1b !important;
+}
+
+.badge.bg-primary,
+.badge.bg-info {
+    background-color: var(--m-info-soft) !important;
+    color: #3730a3 !important;
+}
+
+/* Form Controls */
+.form-control,
+.form-select {
+    border-radius: 10px !important;
+    border: 1px solid #e2e8f0 !important;
+    padding: 9px 13px !important;
+    font-size: 0.87rem !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #f97316 !important;
+    box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.14) !important;
+}
+
+.q-avatar-circle {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.78rem;
+    flex-shrink: 0;
+}
+
+@media (max-width: 991.98px) {
+    .m-mobile-topbar {
+        display: flex;
+    }
+    .app-sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.25s ease;
+    }
+    .app-container.sidebar-mobile-open .app-sidebar {
+        transform: translateX(0);
+    }
+    .fixed-sidebar .app-main .app-main__outer {
+        padding-left: 0 !important;
+    }
+    .app-main__inner {
+        padding: 20px 16px !important;
+    }
+}

@@ -14,187 +14,308 @@
 
     <script type="module" crossorigin src="{{ asset('template/assets/scripts/main-Df65xusa.js') }}"></script>
     <link rel="stylesheet" crossorigin href="{{ asset('template/assets/styles/main.css') }}">
+    <link rel="stylesheet" href="{{ asset('template/assets/styles/quantro-theme.css') }}">
+    @stack('styles')
 </head>
 
 <body>
+@php
+    $currentUser = auth()->user();
+    $hour = (int) now()->format('H');
+    $sapaanWaktu = match (true) {
+        $hour >= 4 && $hour < 11  => 'Selamat Pagi',
+        $hour >= 11 && $hour < 15 => 'Selamat Siang',
+        $hour >= 15 && $hour < 18 => 'Selamat Sore',
+        default                   => 'Selamat Malam',
+    };
+
+    $sidebarHargaAktif   = \App\Models\HargaBeli::getHargaAktif();
+    $countPetaniAktif    = \App\Models\Petani::where('status_aktif', true)->count();
+    $countPasokanBelum   = \App\Models\PasokanTbs::where('status_pembayaran', '!=', 'lunas')->count();
+    $countPengirimanAktif = \App\Models\PengirimanTbs::where('status_pengiriman', 'dikirim')->count();
+@endphp
+
     <div class="app-container app-theme-white body-tabs-shadow fixed-sidebar fixed-header">
-        <div class="app-header header-shadow">
-            <div class="app-header__logo">
-                <a href="{{ url('/') }}" class="text-decoration-none d-flex align-items-center">
-                    <span class="fw-bolder fs-4 text-success" style="letter-spacing: 1px;">
-                        <i class="pe-7s-leaf me-1"></i>SIPADIS
-                    </span>
-                </a>
-                <div class="header__pane ms-auto">
-                    <div>
-                        <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
-                            <span class="hamburger-box">
-                                <span class="hamburger-inner"></span>
-                            </span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-            <div class="app-header__mobile-menu">
-                <div>
-                    <button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
-                        <span class="hamburger-box">
-                            <span class="hamburger-inner"></span>
-                        </span>
-                    </button>
-                </div>
-            </div>
-            <div class="app-header__menu">
-                <span>
-                    <button type="button" class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
-                        <span class="btn-icon-wrapper">
-                            <i class="fa fa-ellipsis-v fa-w-6"></i>
-                        </span>
-                    </button>
-                </span>
-            </div>
-            <div class="app-header__content">
-                <div class="app-header-left">
-                    <div class="search-wrapper">
-                        <div class="input-holder">
-                            <input type="text" class="search-input" placeholder="Cari data...">
-                            <button class="search-icon"><span></span></button>
-                        </div>
-                        <button class="btn-close"></button>
-                    </div>
-                </div>
-                <div class="app-header-right">
-                    <div class="header-btn-lg pe-0">
-                        <div class="widget-content p-0">
-                            <div class="widget-content-wrapper">
-                                <div class="widget-content-left">
-                                    <div class="btn-group">
-                                        <a data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
-                                            <img width="42" class="rounded-circle" src="{{ asset('template/assets/images/avatars/1.jpg') }}" alt="">
-                                            <i class="fa fa-angle-down ms-2 opacity-8"></i>
-                                        </a>
-                                        <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
-                                            <button type="button" tabindex="0" class="dropdown-item">Profil Akun</button>
-                                            <button type="button" tabindex="0" class="dropdown-item">Pengaturan</button>
-                                            <div tabindex="-1" class="dropdown-divider"></div>
-                                            <button type="button" tabindex="0" class="dropdown-item text-danger">Keluar</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="widget-content-left ms-3 header-user-info">
-                                    <div class="widget-heading">
-                                        Admin Pengepul
-                                    </div>
-                                    <div class="widget-subheading">
-                                        Pengelola SIPADIS
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <!-- Mobile Top Bar (< 992px) -->
+        <div class="m-mobile-topbar no-print">
+            <a href="{{ url('/') }}" class="m-brand-link">
+                <span class="m-brand-icon"><i class="fa fa-leaf"></i></span>
+                <span class="m-brand-name">SIPADIS</span>
+            </a>
+            <button type="button" class="btn btn-sm btn-outline-secondary mobile-toggle-nav">
+                <i class="fa fa-bars"></i>
+            </button>
         </div>
 
         <div class="app-main">
-            <div class="app-sidebar sidebar-shadow">
-                <div class="app-header__logo">
-                    <a href="{{ url('/') }}" class="text-decoration-none d-flex align-items-center">
-                        <span class="fw-bolder fs-4 text-success" style="letter-spacing: 1px;">
-                            <i class="pe-7s-leaf me-1"></i>SIPADIS
-                        </span>
-                    </a>
-                    <div class="header__pane ms-auto">
-                        <div>
-                            <button type="button" class="hamburger close-sidebar-btn hamburger--elastic" data-class="closed-sidebar">
-                                <span class="hamburger-box">
-                                    <span class="hamburger-inner"></span>
+            <!-- Left Sidebar (Merivo Structure) -->
+            <div class="app-sidebar sidebar-shadow no-print">
+                <div class="scrollbar-sidebar">
+                    <!-- Top & Middle Navigation Wrapper -->
+                    <div>
+                        <!-- 1. Top Brand Logo + Collapse Button -->
+                        <div class="m-brand-row">
+                            <a href="{{ url('/') }}" class="m-brand-link">
+                                <span class="m-brand-icon">
+                                    <i class="fa fa-leaf"></i>
                                 </span>
+                                <span class="m-brand-name">SIPADIS</span>
+                            </a>
+                            <button type="button" class="m-collapse-btn close-sidebar-btn" data-class="closed-sidebar" title="Toggle Sidebar">
+                                <i class="fa fa-outdent"></i>
                             </button>
                         </div>
-                    </div>
-                </div>
-                <div class="app-header__mobile-menu">
-                    <div>
-                        <button type="button" class="hamburger hamburger--elastic mobile-toggle-nav">
-                            <span class="hamburger-box">
-                                <span class="hamburger-inner"></span>
-                            </span>
-                        </button>
-                    </div>
-                </div>
-                <div class="app-header__menu">
-                    <span>
-                        <button type="button" class="btn-icon btn-icon-only btn btn-primary btn-sm mobile-toggle-header-nav">
-                            <span class="btn-icon-wrapper">
-                                <i class="fa fa-ellipsis-v fa-w-6"></i>
-                            </span>
-                        </button>
-                    </span>
-                </div>
-                <div class="scrollbar-sidebar">
-                    <div class="app-sidebar__inner">
-                        <ul class="vertical-nav-menu">
-                            <li class="app-sidebar__heading">Menu Utama</li>
-                            <li>
-                                <a href="{{ url('/') }}" class="mm-active">
-                                    <i class="metismenu-icon pe-7s-rocket"></i>
-                                    Dashboard
+
+                        <!-- 2. Store / Operational Unit Switcher Box ("Acme Store" equivalent) -->
+                        <a href="{{ $currentUser && $currentUser->isPemilik() ? route('harga-beli.index') : route('pasokan-tbs.index') }}" class="m-store-switcher">
+                            <div class="m-store-left">
+                                <i class="fa fa-store m-store-icon"></i>
+                                <div>
+                                    <div class="m-store-title">RAM Sawit SIPADIS</div>
+                                    <span class="m-store-sub">
+                                        @if($sidebarHargaAktif)
+                                            TBS: Rp {{ number_format($sidebarHargaAktif->harga_tbs, 0, ',', '.') }}/kg
+                                        @else
+                                            Unit Pengepul Utama
+                                        @endif
+                                    </span>
+                                </div>
+                            </div>
+                            <i class="fa fa-sort text-muted small"></i>
+                        </a>
+
+                        <!-- 3. Primary Navigation Menu -->
+                        <ul class="m-nav-list">
+                            <li class="m-nav-item">
+                                <a href="{{ url('/') }}" class="m-nav-link {{ request()->is('/') ? 'active' : '' }}">
+                                    <span class="m-nav-link-left">
+                                        <i class="fa fa-th-large m-nav-icon"></i>
+                                        <span>Dashboard</span>
+                                    </span>
                                 </a>
                             </li>
-                            <li class="app-sidebar__heading">Operasional Sawit</li>
-                            <li>
-                                <a href="{{ route('petani.index') }}" class="{{ request()->routeIs('petani.*') ? 'mm-active' : '' }}">
-                                    <i class="metismenu-icon pe-7s-users"></i>
-                                    Data Petani
+
+                            <li class="m-nav-item">
+                                <a href="{{ route('pasokan-tbs.index') }}" class="m-nav-link {{ request()->routeIs('pasokan-tbs.*') ? 'active' : '' }}">
+                                    <span class="m-nav-link-left">
+                                        <i class="fa fa-weight-hanging m-nav-icon"></i>
+                                        <span>Pasokan TBS</span>
+                                    </span>
+                                    @if($countPasokanBelum > 0)
+                                        <span class="m-nav-badge">{{ $countPasokanBelum }}</span>
+                                    @endif
                                 </a>
                             </li>
-                            <li>
-                                <a href="#">
-                                    <i class="metismenu-icon pe-7s-box2"></i>
-                                    Pasokan TBS
+
+                            <li class="m-nav-item">
+                                <a href="{{ route('petani.index') }}" class="m-nav-link {{ request()->routeIs('petani.*') ? 'active' : '' }}">
+                                    <span class="m-nav-link-left">
+                                        <i class="fa fa-users m-nav-icon"></i>
+                                        <span>Petani Mitra</span>
+                                    </span>
+                                    <span class="m-nav-badge">{{ $countPetaniAktif }}</span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="#">
-                                    <i class="metismenu-icon pe-7s-car"></i>
-                                    Distribusi Pabrik (PKS)
+
+                            <li class="m-nav-item">
+                                <a href="{{ route('pengiriman-tbs.index') }}" class="m-nav-link {{ request()->routeIs('pengiriman-tbs.*') ? 'active' : '' }}">
+                                    <span class="m-nav-link-left">
+                                        <i class="fa fa-truck m-nav-icon"></i>
+                                        <span>Pengiriman TBS ke PKS</span>
+                                    </span>
+                                    @if($countPengirimanAktif > 0)
+                                        <span class="m-nav-badge">{{ $countPengirimanAktif }}</span>
+                                    @endif
                                 </a>
                             </li>
-                            <li class="app-sidebar__heading">Keuangan & Laporan</li>
-                            <li>
-                                <a href="#">
-                                    <i class="metismenu-icon pe-7s-cash"></i>
-                                    Harga & Pembayaran
+
+                            <li class="m-nav-item">
+                                <a href="{{ route('hasil-timbang-pks.index') }}" class="m-nav-link {{ request()->routeIs('hasil-timbang-pks.*') ? 'active' : '' }}">
+                                    <span class="m-nav-link-left">
+                                        <i class="fa fa-file-invoice-dollar m-nav-icon"></i>
+                                        <span>Hasil Timbang PKS</span>
+                                    </span>
                                 </a>
                             </li>
-                            <li>
-                                <a href="#">
-                                    <i class="metismenu-icon pe-7s-graph2"></i>
-                                    Laporan Keuangan
+
+                            <li class="m-nav-item">
+                                <a href="{{ route('pks-pembeli.index') }}" class="m-nav-link {{ request()->routeIs('pks-pembeli.*') ? 'active' : '' }}">
+                                    <span class="m-nav-link-left">
+                                        <i class="fa fa-industry m-nav-icon"></i>
+                                        <span>PKS / Pembeli</span>
+                                    </span>
                                 </a>
                             </li>
                         </ul>
+
+                        <!-- 4. Grouped Section 1: Pintasan Operasional ("v Integrations +" style) -->
+                        <div class="m-section-divider"></div>
+                        <div class="m-section-header">
+                            <span class="m-section-header-left">
+                                <i class="fa fa-chevron-down" style="font-size: 0.65rem;"></i>
+                                <span>Pintasan Operasional</span>
+                            </span>
+                            <a href="{{ route('pasokan-tbs.create') }}" class="m-section-add" title="Catat Pasokan Baru">
+                                <i class="fa fa-plus"></i>
+                            </a>
+                        </div>
+                        <ul class="m-subnav-list">
+                            <li class="m-nav-item">
+                                <a href="{{ route('pasokan-tbs.create') }}" class="m-nav-link {{ request()->routeIs('pasokan-tbs.create') ? 'active' : '' }}">
+                                    <span class="m-nav-link-left">
+                                        <i class="fa fa-plus-circle m-nav-icon"></i>
+                                        <span>Catat Timbang Masuk</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="m-nav-item">
+                                <a href="{{ route('pengiriman-tbs.create') }}" class="m-nav-link {{ request()->routeIs('pengiriman-tbs.create') ? 'active' : '' }}">
+                                    <span class="m-nav-link-left">
+                                        <i class="fa fa-truck-loading m-nav-icon"></i>
+                                        <span>Catat Pengiriman PKS</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="m-nav-item">
+                                <a href="{{ route('hasil-timbang-pks.create') }}" class="m-nav-link {{ request()->routeIs('hasil-timbang-pks.create') ? 'active' : '' }}">
+                                    <span class="m-nav-link-left">
+                                        <i class="fa fa-balance-scale m-nav-icon"></i>
+                                        <span>Input Nota Timbang PKS</span>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+
+                        <!-- 5. Grouped Section 2: Keuangan & Harga (Only for Pemilik, "v Sales Channels +" style) -->
+                        @if(!$currentUser || $currentUser->isPemilik())
+                            <div class="m-section-header">
+                                <span class="m-section-header-left">
+                                    <i class="fa fa-chevron-down" style="font-size: 0.65rem;"></i>
+                                    <span>Keuangan & Harga</span>
+                                </span>
+                                <a href="{{ route('harga-beli.create') }}" class="m-section-add" title="Tetapkan Harga Baru">
+                                    <i class="fa fa-plus"></i>
+                                </a>
+                            </div>
+                            <ul class="m-subnav-list">
+                                <li class="m-nav-item">
+                                    <a href="{{ route('harga-beli.index') }}" class="m-nav-link {{ request()->routeIs('harga-beli.*') ? 'active' : '' }}">
+                                        <span class="m-nav-link-left">
+                                            <i class="fa fa-tags m-nav-icon"></i>
+                                            <span>Harga Beli Harian</span>
+                                        </span>
+                                        <i class="fa fa-external-link-alt text-muted" style="font-size: 0.68rem;"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        @endif
+                    </div>
+
+                    <!-- 6. Bottom User Profile + Settings + Log Out Box (Merivo Bottom-Left Card) -->
+                    <div class="m-sidebar-footer">
+                        <div class="m-user-card">
+                            <div class="m-user-info">
+                                <img src="{{ asset('template/assets/images/avatars/1.jpg') }}" alt="User" class="m-user-avatar">
+                                <div class="overflow-hidden">
+                                    <div class="m-user-name">{{ $currentUser->name ?? 'Admin Pengepul' }}</div>
+                                    <div class="m-user-role">
+                                        @if($currentUser)
+                                            {{ $currentUser->isPemilik() ? 'Pemilik Usaha (Admin)' : 'Petugas Operasional' }}
+                                        @else
+                                            Pengelola SIPADIS
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                            <i class="fa fa-sort text-muted small"></i>
+                        </div>
+
+                        @if(!$currentUser || $currentUser->isPemilik())
+                            <a href="{{ route('harga-beli.index') }}" class="m-footer-action">
+                                <i class="fa fa-cog text-muted"></i>
+                                <span>Pengaturan Harga</span>
+                            </a>
+                        @else
+                            <a href="{{ route('dashboard') }}" class="m-footer-action">
+                                <i class="fa fa-id-badge text-muted"></i>
+                                <span>Sesi Petugas Aktif</span>
+                            </a>
+                        @endif
+
+                        @auth
+                            <form action="{{ route('logout') }}" method="POST" class="m-0">
+                                @csrf
+                                <button type="submit" class="m-footer-action m-logout-btn">
+                                    <i class="fa fa-sign-out-alt"></i>
+                                    <span>Log Out / Keluar</span>
+                                </button>
+                            </form>
+                        @else
+                            <a href="{{ route('login') }}" class="m-footer-action">
+                                <i class="fa fa-sign-in-alt"></i>
+                                <span>Masuk</span>
+                            </a>
+                        @endauth
                     </div>
                 </div>
             </div>
 
+            <!-- Main Content Area -->
             <div class="app-main__outer">
                 <div class="app-main__inner">
-                    @yield('content')
-                </div>
-                <div class="app-wrapper-footer">
-                    <div class="app-footer">
-                        <div class="app-footer__inner">
-                            <div class="app-footer-left">
-                                <span class="text-muted">SIPADIS &copy; {{ date('Y') }} - Sistem Informasi Pengepul Kelapa Sawit</span>
+                    <!-- Dynamic Welcome Greeting Header ("Welcome Back, Liam" style) -->
+                    <div class="m-welcome-bar no-print">
+                        <div>
+                            <h1 class="m-welcome-title">
+                                {{ $sapaanWaktu }}, Selamat Datang Kembali, {{ $currentUser->name ?? 'Pengelola' }} 👋
+                            </h1>
+                            <div class="m-welcome-sub">
+                                @if($currentUser && $currentUser->isPemilik())
+                                    <span class="m-role-pill m-role-pemilik">
+                                        <i class="fa fa-crown"></i> Sesi Pemilik Usaha
+                                    </span>
+                                    <span>Pantau performa pasokan petani, harga TBS, dan distribusi PKS hari ini.</span>
+                                @else
+                                    <span class="m-role-pill m-role-petugas">
+                                        <i class="fa fa-user-check"></i> Sesi Petugas Operasional
+                                    </span>
+                                    <span>Selamat bertugas! Siap mencatat timbangan pasokan TBS dan pengiriman ke PKS.</span>
+                                @endif
+                                <span class="text-muted">&bull; {{ now()->format('d M Y, H:i') }} WIB</span>
                             </div>
                         </div>
+                        <div class="d-flex align-items-center gap-2">
+                            <form action="{{ route('pasokan-tbs.index') }}" method="GET" class="d-none d-md-flex">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-white border-end-0"><i class="fa fa-search text-muted"></i></span>
+                                    <input type="text" name="search" class="form-control border-start-0 ps-0" placeholder="Cari transaksi...">
+                                </div>
+                            </form>
+                        </div>
                     </div>
+
+                    <!-- Flash Welcome Banner Right After Login -->
+                    @if(session('login_welcome'))
+                        <div class="m-session-welcome-alert alert-dismissible fade show no-print" role="alert">
+                            <div class="d-flex align-items-center gap-3">
+                                <span class="m-brand-icon" style="width: 38px; height: 38px; flex-shrink: 0;">
+                                    <i class="fa fa-hand-sparkles"></i>
+                                </span>
+                                <div>
+                                    <div class="fw-bold text-dark">{{ session('login_welcome') }}</div>
+                                    <div class="small text-muted">Sesi Anda telah aktif dan seluruh modul sesuai hak akses Anda siap digunakan.</div>
+                                </div>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    @endif
+
+                    @yield('content')
                 </div>
             </div>
         </div>
     </div>
+    @stack('scripts')
 </body>
 
 </html>
